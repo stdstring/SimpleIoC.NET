@@ -1,0 +1,8 @@
+*.suo
+*.csproj.user
+*.sln.DotSettings.user
+SimpleIoC/SimpleIoC.Tests/bin/*
+SimpleIoC/SimpleIoC.Tests/obj/*
+SimpleIoC/SimpleIoC/bin/*
+SimpleIoC/SimpleIoC/obj/*
+SimpleIoC/packages/*
