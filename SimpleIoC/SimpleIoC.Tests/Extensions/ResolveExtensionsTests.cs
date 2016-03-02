@@ -7,17 +7,26 @@ using SimpleIoC.Tests.Utils;
 namespace SimpleIoC.Tests.Extensions
 {
     [TestFixture]
-    public class ResolveExtensionTests
+    public class ResolveExtensionsTests
     {
+        [Test]
+        public void BadArgsInResolveNameTypeServices()
+        {
+            IServiceContainer container = null;
+            // ReSharper disable ExpressionIsAlwaysNull
+            Assert.Throws<ArgumentNullException>(() => container.ResolveNameTypeServices<String>());
+            // ReSharper restore ExpressionIsAlwaysNull
+        }
+
         [Test]
         public void ResolveNameTypeServicesInSimpleContainer()
         {
             IServiceContainer container = new ServiceContainer();
-            container.AddSimpleValueComponent("some name", "some value");
-            container.AddSimpleValueComponent<String>("some other value");
-            container.AddSimpleValueComponent<String>("key1", "IDDQD");
-            container.AddSimpleValueComponent<String>("key2", "IDKFA");
-            container.AddSimpleValueComponent<SomeData>("key3", new SomeData("IDCLIP"));
+            container.AddSimpleValueComponent("some name", new Object());
+            container.AddSimpleValueComponent("some other value");
+            container.AddSimpleValueComponent("key1", "IDDQD");
+            container.AddSimpleValueComponent("key2", "IDKFA");
+            container.AddSimpleValueComponent("key3", new SomeData("IDCLIP"));
             TestCommonBody(container, new[] {"IDDQD", "IDKFA"});
         }
 
@@ -27,11 +36,11 @@ namespace SimpleIoC.Tests.Extensions
             IServiceContainer mainContainer = new ServiceContainer();
             IServiceContainer subContainer = new ServiceContainer();
             mainContainer.AddSubContainer(subContainer);
-            mainContainer.AddSimpleValueComponent("some name", "some value");
-            subContainer.AddSimpleValueComponent<String>("some other value");
-            mainContainer.AddSimpleValueComponent<String>("key1", "IDDQD");
-            subContainer.AddSimpleValueComponent<String>("key2", "IDKFA");
-            mainContainer.AddSimpleValueComponent<SomeData>("key3", new SomeData("IDCLIP"));
+            mainContainer.AddSimpleValueComponent("some name", new Object());
+            subContainer.AddSimpleValueComponent("some other value");
+            mainContainer.AddSimpleValueComponent("key1", "IDDQD");
+            subContainer.AddSimpleValueComponent("key2", "IDKFA");
+            mainContainer.AddSimpleValueComponent("key3", new SomeData("IDCLIP"));
             TestCommonBody(mainContainer, new[] {"IDDQD", "IDKFA"});
         }
 

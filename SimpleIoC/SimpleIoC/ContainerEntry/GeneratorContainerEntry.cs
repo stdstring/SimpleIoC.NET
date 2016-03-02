@@ -2,18 +2,29 @@
 
 namespace SimpleIoC.ContainerEntry
 {
-    public class GeneratorContainerEntry : IContainerEntry
+    public class GeneratorContainerEntry<T> : IContainerEntry<T>, IContainerEntry where T : class
     {
-        public GeneratorContainerEntry(Func<IServiceContainer, Object> generator)
+        public GeneratorContainerEntry(CreateFunc<T> generator)
         {
+            if (generator == null)
+                throw new ArgumentNullException(nameof(generator));
             _generator = generator;
         }
 
-        public Object GetValue(IServiceContainer container)
+        public T GetValue(IServiceContainer container)
         {
+            if (container == null)
+                throw new ArgumentNullException(nameof(container));
             return _generator(container);
         }
 
-        private readonly Func<IServiceContainer, Object> _generator;
+        Object IContainerEntry.GetValue(IServiceContainer container)
+        {
+            if (container == null)
+                throw new ArgumentNullException(nameof(container));
+            return GetValue(container);
+        }
+
+        private readonly CreateFunc<T> _generator;
     }
 }

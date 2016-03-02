@@ -6,6 +6,8 @@ namespace SimpleIoC.Key
     {
         public NameKey(String name) : base(name)
         {
+            if (String.IsNullOrEmpty(name))
+                throw new ArgumentNullException(nameof(name));
         }
 
         public String Name { get { return Item1; } }

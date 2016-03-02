@@ -7,6 +7,10 @@ namespace SimpleIoC.Key
         public NameTypeKey(String name, Type type)
             : base(name, type)
         {
+            if (String.IsNullOrEmpty(name))
+                throw new ArgumentNullException(nameof(name));
+            if (type == null)
+                throw new ArgumentNullException(nameof(type));
         }
 
         public String Name { get { return Item1; } }

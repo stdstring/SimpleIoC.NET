@@ -13,11 +13,14 @@ namespace SimpleIoC
         Object Resolve(Type type);
         T Resolve<T>(String name);
         Object Resolve(String name, Type type);
+
         // resolve by condition
         IList<Object> Resolve(Func<Object, Boolean> keyPredicate);
         IList<T> Resolve<T>(Func<Object, Boolean> keyPredicate);
+
         // resolve entries by condition
         IList<IContainerEntry> ResolveEntries(Func<Object, Boolean> keyPredicate);
+
         // has
         Boolean HasComponent(Object key);
         Boolean HasComponent(String name);
@@ -25,6 +28,7 @@ namespace SimpleIoC
         Boolean HasComponent(Type type);
         Boolean HasComponent<T>(String name);
         Boolean HasComponent(String name, Type type);
+
         // add
         void AddComponent(Object key, IContainerEntry entry);
         void AddComponent(String name, IContainerEntry entry);
@@ -32,6 +36,7 @@ namespace SimpleIoC
         void AddComponent(Type type, IContainerEntry entry);
         void AddComponent<T>(String name, IContainerEntry entry);
         void AddComponent(String name, Type type, IContainerEntry entry);
+
         // remove
         void RemoveComponent(Object key);
         void RemoveComponent(String name);
@@ -39,9 +44,11 @@ namespace SimpleIoC
         void RemoveComponent(Type type);
         void RemoveComponent<T>(String name);
         void RemoveComponent(String name, Type type);
+
         // add/remove subcontainers
         void AddSubContainer(IServiceContainer container);
         void RemoveSubContainer(IServiceContainer container);
+
         // init/clear
         void Clear();
         void Initialize(Action<IServiceContainer> initializer);

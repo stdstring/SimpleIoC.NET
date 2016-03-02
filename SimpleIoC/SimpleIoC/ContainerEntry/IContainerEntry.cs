@@ -6,4 +6,9 @@ namespace SimpleIoC.ContainerEntry
     {
         Object GetValue(IServiceContainer container);
     }
+
+    public interface IContainerEntry<out T> where T : class
+    {
+        T GetValue(IServiceContainer container);
+    }
 }

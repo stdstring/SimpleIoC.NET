@@ -25,7 +25,7 @@ namespace SimpleIoC.Tests
         public void TestSingleContainerRemoveComponentByKey()
         {
             _singleContainer.AddComponent(_key, _entry);
-            _singleContainer.AddComponent(_otherKey, new SimpleContainerEntry(OtherEntryValue));
+            _singleContainer.AddComponent(_otherKey, new SimpleContainerEntry<String>(OtherEntryValue));
             RemoveComponent(_key, _singleContainer, _singleContainer, true, false);
             RemoveComponent(_key, _singleContainer, _singleContainer, false, false);
             Assert.IsTrue(_singleContainer.HasComponent(_otherKey));
@@ -35,7 +35,7 @@ namespace SimpleIoC.Tests
         public void TestRemoveComponentByKey()
         {
             _subContainer1.AddComponent(_key, _entry);
-            _subContainer1.AddComponent(_otherKey, new SimpleContainerEntry(OtherEntryValue));
+            _subContainer1.AddComponent(_otherKey, new SimpleContainerEntry<String>(OtherEntryValue));
             RemoveComponent(_key, _subContainer2, _mainContainer, true, true);
             RemoveComponent(_key, _innerSubContainer, _mainContainer, true, true);
             RemoveComponent(_key, _subContainer1, _mainContainer, true, false);
@@ -47,7 +47,7 @@ namespace SimpleIoC.Tests
         public void TestSingleContainerRemoveComponentByName()
         {
             _singleContainer.AddComponent(Name, _entry);
-            _singleContainer.AddComponent(OtherName, new SimpleContainerEntry(OtherEntryValue));
+            _singleContainer.AddComponent(OtherName, new SimpleContainerEntry<String>(OtherEntryValue));
             RemoveComponent(Name, _singleContainer, _singleContainer, true, false);
             RemoveComponent(Name, _singleContainer, _singleContainer, false, false);
             Assert.IsTrue(_singleContainer.HasComponent(OtherName));
@@ -57,7 +57,7 @@ namespace SimpleIoC.Tests
         public void TestRemoveComponentByName()
         {
             _subContainer1.AddComponent(Name, _entry);
-            _subContainer1.AddComponent(OtherName, new SimpleContainerEntry(OtherEntryValue));
+            _subContainer1.AddComponent(OtherName, new SimpleContainerEntry<String>(OtherEntryValue));
             RemoveComponent(Name, _subContainer2, _mainContainer, true, true);
             RemoveComponent(Name, _innerSubContainer, _mainContainer, true, true);
             RemoveComponent(Name, _subContainer1, _mainContainer, true, false);
@@ -69,7 +69,7 @@ namespace SimpleIoC.Tests
         public void TestSingleContainerRemoveComponentByType()
         {
             _singleContainer.AddComponent<String>(_entry);
-            _singleContainer.AddComponent<SomeData>(new SimpleContainerEntry(new SomeData(OtherEntryValue)));
+            _singleContainer.AddComponent<SomeData>(new SimpleContainerEntry<SomeData>(new SomeData(OtherEntryValue)));
             RemoveComponent<String>(_singleContainer, _singleContainer, true, false);
             RemoveComponent<String>(_singleContainer, _singleContainer, false, false);
             Assert.IsTrue(_singleContainer.HasComponent<SomeData>());
@@ -79,7 +79,7 @@ namespace SimpleIoC.Tests
         public void TestRemoveComponentByType()
         {
             _subContainer1.AddComponent<String>(_entry);
-            _subContainer1.AddComponent<SomeData>(new SimpleContainerEntry(new SomeData(OtherEntryValue)));
+            _subContainer1.AddComponent<SomeData>(new SimpleContainerEntry<SomeData>(new SomeData(OtherEntryValue)));
             RemoveComponent<String>(_subContainer2, _mainContainer, true, true);
             RemoveComponent<String>(_innerSubContainer, _mainContainer, true, true);
             RemoveComponent<String>(_subContainer1, _mainContainer, true, false);
@@ -106,7 +106,7 @@ namespace SimpleIoC.Tests
         public void TestSingleContainerRemoveComponentByTypeAndName()
         {
             _singleContainer.AddComponent<String>(Name, _entry);
-            _singleContainer.AddComponent<String>(OtherName, new SimpleContainerEntry(OtherEntryValue));
+            _singleContainer.AddComponent<String>(OtherName, new SimpleContainerEntry<String>(OtherEntryValue));
             RemoveComponent<String>(Name, _singleContainer, _singleContainer, true, false);
             RemoveComponent<String>(Name, _singleContainer, _singleContainer, false, false);
             Assert.IsTrue(_singleContainer.HasComponent<String>(OtherName));
@@ -116,7 +116,7 @@ namespace SimpleIoC.Tests
         public void TestRemoveComponentByTypeAndName()
         {
             _subContainer1.AddComponent<String>(Name, _entry);
-            _subContainer1.AddComponent<String>(OtherName, new SimpleContainerEntry(OtherEntryValue));
+            _subContainer1.AddComponent<String>(OtherName, new SimpleContainerEntry<String>(OtherEntryValue));
             RemoveComponent<String>(Name, _subContainer2, _mainContainer, true, true);
             RemoveComponent<String>(Name, _innerSubContainer, _mainContainer, true, true);
             RemoveComponent<String>(Name, _subContainer1, _mainContainer, true, false);
@@ -172,7 +172,7 @@ namespace SimpleIoC.Tests
         private IServiceContainer _subContainer1;
         private IServiceContainer _subContainer2;
         private IServiceContainer _innerSubContainer;
-        private readonly IContainerEntry _entry = new SimpleContainerEntry(EntryValue);
+        private readonly IContainerEntry _entry = new SimpleContainerEntry<String>(EntryValue);
         private const String EntryValue = "impulse 666";
         private const String OtherEntryValue = "impulse 9";
         // keys

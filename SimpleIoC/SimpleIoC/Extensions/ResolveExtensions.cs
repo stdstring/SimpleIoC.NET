@@ -4,10 +4,12 @@ using SimpleIoC.Key;
 
 namespace SimpleIoC.Extensions
 {
-    public static class ResolveExtension
+    public static class ResolveExtensions
     {
         public static IList<T> ResolveNameTypeServices<T>(this IServiceContainer container)
         {
+            if (container == null)
+                throw new ArgumentNullException(nameof(container));
             Func<Object, Boolean> predicate =
                 key =>
                     {

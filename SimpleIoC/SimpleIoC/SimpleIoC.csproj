@@ -4,13 +4,14 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{C0E164BF-CDCF-49CA-BE1C-227E318B3D28}</ProjectGuid>
+    <ProjectGuid>{6FE0F7D3-3A4F-4034-A0E7-18848452DD86}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>SimpleIoC</RootNamespace>
     <AssemblyName>SimpleIoC</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -20,6 +21,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -28,6 +30,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -39,22 +42,26 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ContainerEntry\GeneratorContainerEntry.cs" />
-    <Compile Include="ContainerEntry\IContainerEntry.cs" />
-    <Compile Include="ContainerEntry\LazyContainerEntry.cs" />
-    <Compile Include="ContainerEntry\SimpleContainerEntry.cs" />
     <Compile Include="Exceptions\ServiceAlreadyRegisteredException.cs" />
     <Compile Include="Exceptions\ServiceNotFoundException.cs" />
-    <Compile Include="Extensions\DictionaryExtension.cs" />
-    <Compile Include="Extensions\ResolveExtension.cs" />
-    <Compile Include="Extensions\ServiceContainerExtension.cs" />
+    <Compile Include="Extensions\DictionaryExtensions.cs" />
+    <Compile Include="Extensions\ReplaceExtensions.cs" />
+    <Compile Include="Extensions\ResolveExtensions.cs" />
+    <Compile Include="Extensions\ServiceContainerExtensions.cs" />
+    <Compile Include="Extensions\TryResolveExtensions.cs" />
+    <Compile Include="FuncDef.cs" />
+    <Compile Include="ServiceContainer.cs" />
+    <Compile Include="ContainerEntry\IContainerEntry.cs" />
+    <Compile Include="ContainerEntry\LazyContainerEntry.cs" />
+    <Compile Include="ContainerEntry\GeneratorContainerEntry.cs" />
     <Compile Include="IServiceContainer.cs" />
     <Compile Include="Key\NameKey.cs" />
     <Compile Include="Key\NameTypeKey.cs" />
-    <Compile Include="Key\TypeKey.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ServiceContainer.cs" />
+    <Compile Include="ContainerEntry\SimpleContainerEntry.cs" />
+    <Compile Include="Key\TypeKey.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -23,9 +23,26 @@ namespace SimpleIoC.Tests
         }
 
         [Test]
+        public void TestServiceAlreadyRegisteredException()
+        {
+            const String serviceWithKeyMessage = "Service with key \"key = 666\" is registered already";
+            const String serviceWithNameMessage = "Service with name \"iddqd\" is registered already";
+            const String serviceWithTypeMessage = "Service with type \"System.String\" is registered already";
+            const String serviceWithNameTypeMessage = "Service with name \"iddqd\" and type \"System.String\" is registered already";
+            _singleContainer.AddComponent(_key, new SimpleContainerEntry<String>(EntryValue));
+            _singleContainer.AddComponent(Name, new SimpleContainerEntry<String>(EntryValue));
+            _singleContainer.AddComponent<String>(new SimpleContainerEntry<String>(EntryValue));
+            _singleContainer.AddComponent<String>(Name, new SimpleContainerEntry<String>(EntryValue));
+            CheckServiceAlreadyRegisteredException(() => _singleContainer.AddComponent(_key, new SimpleContainerEntry<String>(OtherEntryValue)), serviceWithKeyMessage);
+            CheckServiceAlreadyRegisteredException(() => _singleContainer.AddComponent(Name, new SimpleContainerEntry<String>(OtherEntryValue)), serviceWithNameMessage);
+            CheckServiceAlreadyRegisteredException(() => _singleContainer.AddComponent<String>(new SimpleContainerEntry<String>(OtherEntryValue)), serviceWithTypeMessage);
+            CheckServiceAlreadyRegisteredException(() => _singleContainer.AddComponent<String>(Name, new SimpleContainerEntry<String>(OtherEntryValue)), serviceWithNameTypeMessage);
+        }
+
+        [Test]
         public void TestSingleContainerAddComponentByKey()
         {
-            _singleContainer.AddComponent(_otherKey, new SimpleContainerEntry(OtherEntryValue));
+            _singleContainer.AddComponent(_otherKey, new SimpleContainerEntry<String>(OtherEntryValue));
             AddComponent(_key, _singleContainer, _singleContainer, false, true, true);
             AddComponent(_key, _singleContainer, _singleContainer, true, false, true);
         }
@@ -33,7 +50,7 @@ namespace SimpleIoC.Tests
         [Test]
         public void TestAddComponentByKey()
         {
-            _innerSubContainer.AddComponent(_otherKey, new SimpleContainerEntry(OtherEntryValue));
+            _innerSubContainer.AddComponent(_otherKey, new SimpleContainerEntry<String>(OtherEntryValue));
             AddComponent(_key, _subContainer1, _mainContainer, false, true, true);
             AddComponent(_key, _subContainer1, _mainContainer, true, false, true);
             AddComponent(_key, _mainContainer, _mainContainer, true, false, true);
@@ -43,7 +60,7 @@ namespace SimpleIoC.Tests
         [Test]
         public void TestSingleContainerAddComponentByName()
         {
-            _singleContainer.AddComponent(OtherName, new SimpleContainerEntry(OtherEntryValue));
+            _singleContainer.AddComponent(OtherName, new SimpleContainerEntry<String>(OtherEntryValue));
             AddComponent(Name, _singleContainer, _singleContainer, false, true, true);
             AddComponent(Name, _singleContainer, _singleContainer, true, false, true);
         }
@@ -51,7 +68,7 @@ namespace SimpleIoC.Tests
         [Test]
         public void TestAddComponentByName()
         {
-            _innerSubContainer.AddComponent(OtherName, new SimpleContainerEntry(OtherEntryValue));
+            _innerSubContainer.AddComponent(OtherName, new SimpleContainerEntry<String>(OtherEntryValue));
             AddComponent(Name, _subContainer1, _mainContainer, false, true, true);
             AddComponent(Name, _subContainer1, _mainContainer, true, false, true);
             AddComponent(Name, _mainContainer, _mainContainer, true, false, true);
@@ -61,7 +78,7 @@ namespace SimpleIoC.Tests
         [Test]
         public void TestSingleContainerAddComponentByType()
         {
-            _singleContainer.AddComponent<SomeData>(new SimpleContainerEntry(new SomeData(OtherEntryValue)));
+            _singleContainer.AddComponent<SomeData>(new SimpleContainerEntry<SomeData>(new SomeData(OtherEntryValue)));
             AddComponent<String>(_singleContainer, _singleContainer, false, true, true);
             AddComponent<String>(_singleContainer, _singleContainer, true, false, true);
             Assert.IsFalse(_singleContainer.HasComponent<String>(Name));
@@ -70,7 +87,7 @@ namespace SimpleIoC.Tests
         [Test]
         public void TestAddComponentByType()
         {
-            _innerSubContainer.AddComponent<SomeData>(new SimpleContainerEntry(new SomeData(OtherEntryValue)));
+            _innerSubContainer.AddComponent<SomeData>(new SimpleContainerEntry<SomeData>(new SomeData(OtherEntryValue)));
             AddComponent<String>(_subContainer1, _mainContainer, false, true, true);
             AddComponent<String>(_subContainer1, _mainContainer, true, false, true);
             AddComponent<String>(_mainContainer, _mainContainer, true, false, true);
@@ -81,7 +98,7 @@ namespace SimpleIoC.Tests
         public void TestAddComponentByTypeMethodEquality()
         {
             Assert.IsFalse(_singleContainer.HasComponent<String>());
-            Assert.DoesNotThrow(() => _singleContainer.AddComponent(typeof(String), _entry));
+            Assert.DoesNotThrow(() => _singleContainer.AddComponent(typeof (String), _entry));
             Assert.IsTrue(_singleContainer.HasComponent<String>());
             Assert.Throws<ServiceAlreadyRegisteredException>(() => _singleContainer.AddComponent<String>(_entry));
             Assert.IsTrue(_singleContainer.HasComponent<String>());
@@ -90,7 +107,7 @@ namespace SimpleIoC.Tests
         [Test]
         public void TestSingleContainerAddComponentByTypeAndName()
         {
-            _singleContainer.AddComponent<String>(OtherName, new SimpleContainerEntry(OtherEntryValue));
+            _singleContainer.AddComponent<String>(OtherName, new SimpleContainerEntry<String>(OtherEntryValue));
             AddComponent<String>(Name, _singleContainer, _singleContainer, false, true, true);
             AddComponent<String>(Name, _singleContainer, _singleContainer, true, false, true);
         }
@@ -98,7 +115,7 @@ namespace SimpleIoC.Tests
         [Test]
         public void TestAddComponentByTypeAndName()
         {
-            _innerSubContainer.AddComponent<String>(OtherName, new SimpleContainerEntry(OtherEntryValue));
+            _innerSubContainer.AddComponent<String>(OtherName, new SimpleContainerEntry<String>(OtherEntryValue));
             AddComponent<String>(Name, _subContainer1, _mainContainer, false, true, true);
             AddComponent<String>(Name, _subContainer1, _mainContainer, true, false, true);
             AddComponent<String>(Name, _mainContainer, _mainContainer, true, false, true);
@@ -113,6 +130,11 @@ namespace SimpleIoC.Tests
             Assert.IsTrue(_singleContainer.HasComponent<String>(Name));
             Assert.Throws<ServiceAlreadyRegisteredException>(() => _singleContainer.AddComponent<String>(Name, _entry));
             Assert.IsTrue(_singleContainer.HasComponent<String>(Name));
+        }
+
+        private void CheckServiceAlreadyRegisteredException(Action action, String exceptionMessage)
+        {
+            ExceptionChecker.Throws<ServiceAlreadyRegisteredException>(action, exceptionMessage);
         }
 
         private void AddComponent(OtherKey key, IServiceContainer addContainer, IServiceContainer searchContainer, Boolean beforeValue, Boolean addValue, Boolean afterValue)
@@ -160,7 +182,7 @@ namespace SimpleIoC.Tests
         private IServiceContainer _subContainer1;
         private IServiceContainer _subContainer2;
         private IServiceContainer _innerSubContainer;
-        private readonly IContainerEntry _entry = new SimpleContainerEntry(EntryValue);
+        private readonly IContainerEntry _entry = new SimpleContainerEntry<String>(EntryValue);
         private const String EntryValue = "impulse 666";
         private const String OtherEntryValue = "impulse 9";
         // keys

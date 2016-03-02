@@ -18,15 +18,15 @@ namespace SimpleIoC.Tests.ContainerEntry
         public void TestValueCreation()
         {
             IServiceContainer container = _repository.Stub<IServiceContainer>();
-            Func<IServiceContainer, Object> initializer;
+            CreateFunc<String> initializer;
             using (_repository.Record())
             {
-                initializer = _repository.StrictMock<Func<IServiceContainer, Object>>();
+                initializer = _repository.StrictMock<CreateFunc<String>>();
                 Expect.Call(initializer(container)).Return("IDDQD").Repeat.Times(2);
             }
             using (_repository.Playback())
             {
-                GeneratorContainerEntry entry = new GeneratorContainerEntry(initializer);
+                GeneratorContainerEntry<String> entry = new GeneratorContainerEntry<String>(initializer);
                 Assert.AreEqual("IDDQD", entry.GetValue(container));
                 Assert.AreEqual("IDDQD", entry.GetValue(container));
             }

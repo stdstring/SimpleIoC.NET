@@ -25,7 +25,7 @@ namespace SimpleIoC.Tests
         public void TestSingleContainerHasComponentByKey()
         {
             _singleContainer.AddComponent(_key, _entry);
-            _singleContainer.AddComponent(_otherKey, new SimpleContainerEntry(OtherEntryValue));
+            _singleContainer.AddComponent(_otherKey, new SimpleContainerEntry<String>(OtherEntryValue));
             Assert.IsTrue(_singleContainer.HasComponent(_key));
             Assert.IsFalse(_singleContainer.HasComponent(_unknownKey));
         }
@@ -34,7 +34,7 @@ namespace SimpleIoC.Tests
         public void TestHasComponentByKey()
         {
             _innerSubContainer.AddComponent(_key, _entry);
-            _innerSubContainer.AddComponent(_otherKey, new SimpleContainerEntry(OtherEntryValue));
+            _innerSubContainer.AddComponent(_otherKey, new SimpleContainerEntry<String>(OtherEntryValue));
             Assert.IsTrue(_mainContainer.HasComponent(_key));
             Assert.IsTrue(_subContainer1.HasComponent(_key));
             Assert.IsTrue(_innerSubContainer.HasComponent(_key));
@@ -45,8 +45,8 @@ namespace SimpleIoC.Tests
         [Test]
         public void TestHasComponentByKeyWithDuplicates()
         {
-            IContainerEntry entry = new SimpleContainerEntry(EntryValue);
-            IContainerEntry otherEntry = new SimpleContainerEntry(OtherEntryValue);
+            IContainerEntry entry = new SimpleContainerEntry<String>(EntryValue);
+            IContainerEntry otherEntry = new SimpleContainerEntry<String>(OtherEntryValue);
             _subContainer1.AddComponent(_key, entry);
             _innerSubContainer.AddComponent(_key, otherEntry);
             Assert.IsTrue(_mainContainer.HasComponent(_key));
@@ -59,7 +59,7 @@ namespace SimpleIoC.Tests
         public void TestSingleContainerHasComponentByName()
         {
             _singleContainer.AddComponent(Name, _entry);
-            _singleContainer.AddComponent(OtherName, new SimpleContainerEntry(OtherEntryValue));
+            _singleContainer.AddComponent(OtherName, new SimpleContainerEntry<String>(OtherEntryValue));
             Assert.IsTrue(_singleContainer.HasComponent(Name));
             Assert.IsFalse(_singleContainer.HasComponent(UnknownName));
         }
@@ -68,7 +68,7 @@ namespace SimpleIoC.Tests
         public void TestHasComponentByName()
         {
             _innerSubContainer.AddComponent(Name, _entry);
-            _innerSubContainer.AddComponent(OtherName, new SimpleContainerEntry(OtherEntryValue));
+            _innerSubContainer.AddComponent(OtherName, new SimpleContainerEntry<String>(OtherEntryValue));
             Assert.IsTrue(_mainContainer.HasComponent(Name));
             Assert.IsTrue(_subContainer1.HasComponent(Name));
             Assert.IsTrue(_innerSubContainer.HasComponent(Name));
@@ -79,8 +79,8 @@ namespace SimpleIoC.Tests
         [Test]
         public void TestHasComponentByNameWithDuplicates()
         {
-            IContainerEntry entry = new SimpleContainerEntry(EntryValue);
-            IContainerEntry otherEntry = new SimpleContainerEntry(OtherEntryValue);
+            IContainerEntry entry = new SimpleContainerEntry<String>(EntryValue);
+            IContainerEntry otherEntry = new SimpleContainerEntry<String>(OtherEntryValue);
             _subContainer1.AddComponent(Name, entry);
             _innerSubContainer.AddComponent(Name, otherEntry);
             Assert.IsTrue(_mainContainer.HasComponent(Name));
@@ -93,7 +93,7 @@ namespace SimpleIoC.Tests
         public void TestSingleContainerHasComponentByType()
         {
             _singleContainer.AddComponent<String>(_entry);
-            _singleContainer.AddComponent<SomeData>(new SimpleContainerEntry(new SomeData(OtherEntryValue)));
+            _singleContainer.AddComponent<SomeData>(new SimpleContainerEntry<SomeData>(new SomeData(OtherEntryValue)));
             Assert.IsTrue(_singleContainer.HasComponent<String>());
             Assert.IsFalse(_singleContainer.HasComponent<Uri>());
             Assert.IsFalse(_singleContainer.HasComponent<String>(Name));
@@ -103,7 +103,7 @@ namespace SimpleIoC.Tests
         public void TestHasComponentByType()
         {
             _innerSubContainer.AddComponent<String>(_entry);
-            _singleContainer.AddComponent<SomeData>(new SimpleContainerEntry(new SomeData(OtherEntryValue)));
+            _singleContainer.AddComponent<SomeData>(new SimpleContainerEntry<SomeData>(new SomeData(OtherEntryValue)));
             Assert.IsTrue(_mainContainer.HasComponent<String>());
             Assert.IsTrue(_subContainer1.HasComponent<String>());
             Assert.IsTrue(_innerSubContainer.HasComponent<String>());
@@ -115,8 +115,8 @@ namespace SimpleIoC.Tests
         [Test]
         public void TestHasComponentByTypeWithDuplicates()
         {
-            IContainerEntry entry = new SimpleContainerEntry(EntryValue);
-            IContainerEntry otherEntry = new SimpleContainerEntry(OtherEntryValue);
+            IContainerEntry entry = new SimpleContainerEntry<String>(EntryValue);
+            IContainerEntry otherEntry = new SimpleContainerEntry<String>(OtherEntryValue);
             _subContainer1.AddComponent<String>(entry);
             _innerSubContainer.AddComponent<String>(otherEntry);
             Assert.IsTrue(_mainContainer.HasComponent<String>());
@@ -140,7 +140,7 @@ namespace SimpleIoC.Tests
         {
             _singleContainer.AddComponent<String>(Name, _entry);
             _singleContainer.AddComponent<String>(OtherName, _entry);
-            _singleContainer.AddComponent<SomeData>(AnotherName, new SimpleContainerEntry(new SomeData(OtherEntryValue)));
+            _singleContainer.AddComponent<SomeData>(AnotherName, new SimpleContainerEntry<SomeData>(new SomeData(OtherEntryValue)));
             Assert.IsTrue(_singleContainer.HasComponent<String>(Name));
             Assert.IsFalse(_singleContainer.HasComponent<String>(UnknownName));
             Assert.IsFalse(_singleContainer.HasComponent<String>());
@@ -151,7 +151,7 @@ namespace SimpleIoC.Tests
         {
             _innerSubContainer.AddComponent<String>(Name, _entry);
             _innerSubContainer.AddComponent<String>(OtherName, _entry);
-            _innerSubContainer.AddComponent<SomeData>(AnotherName, new SimpleContainerEntry(new SomeData(OtherEntryValue)));
+            _innerSubContainer.AddComponent<SomeData>(AnotherName, new SimpleContainerEntry<SomeData>(new SomeData(OtherEntryValue)));
             Assert.IsTrue(_mainContainer.HasComponent<String>(Name));
             Assert.IsTrue(_subContainer1.HasComponent<String>(Name));
             Assert.IsTrue(_innerSubContainer.HasComponent<String>(Name));
@@ -163,8 +163,8 @@ namespace SimpleIoC.Tests
         [Test]
         public void TestHasComponentByTypeAndNameWithDuplicates()
         {
-            IContainerEntry entry = new SimpleContainerEntry(EntryValue);
-            IContainerEntry otherEntry = new SimpleContainerEntry(OtherEntryValue);
+            IContainerEntry entry = new SimpleContainerEntry<String>(EntryValue);
+            IContainerEntry otherEntry = new SimpleContainerEntry<String>(OtherEntryValue);
             _subContainer1.AddComponent<String>(Name, entry);
             _innerSubContainer.AddComponent<String>(Name, otherEntry);
             Assert.IsTrue(_mainContainer.HasComponent<String>(Name));
@@ -189,7 +189,7 @@ namespace SimpleIoC.Tests
         private IServiceContainer _subContainer2;
         private IServiceContainer _innerSubContainer;
 
-        private readonly IContainerEntry _entry = new SimpleContainerEntry(EntryValue);
+        private readonly IContainerEntry _entry = new SimpleContainerEntry<String>(EntryValue);
 
         private const String EntryValue = "impulse 666";
         private const String OtherEntryValue = "impulse 9";

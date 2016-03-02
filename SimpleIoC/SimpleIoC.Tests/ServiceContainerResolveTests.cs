@@ -25,6 +25,19 @@ namespace SimpleIoC.Tests
         }
 
         [Test]
+        public void TestServiceAlreadyRegisteredException()
+        {
+            const String serviceByKeyMessage = "Service by key \"key = 666\" is not found";
+            const String serviceByNameMessage = "Service by name \"iddqd\" is not found";
+            const String serviceByTypeMessage = "Service by type \"System.String\" is not found";
+            const String serviceByNameTypeMessage = "Service by name \"iddqd\" and type \"System.String\" is not found";
+            CheckServiceNotFoundException(() => _singleContainer.Resolve(_key), serviceByKeyMessage);
+            CheckServiceNotFoundException(() => _singleContainer.Resolve(Name), serviceByNameMessage);
+            CheckServiceNotFoundException(() => _singleContainer.Resolve<String>(), serviceByTypeMessage);
+            CheckServiceNotFoundException(() => _singleContainer.Resolve<String>(Name), serviceByNameTypeMessage);
+        }
+
+        [Test]
         public void TestSingleContainerResolveByKey()
         {
             _singleContainer.AddComponent(_key, _entry);
@@ -92,7 +105,7 @@ namespace SimpleIoC.Tests
         public void TestSingleContainerResolveByType()
         {
             _singleContainer.AddComponent<String>(_entry);
-            _singleContainer.AddComponent<SomeData>(new SimpleContainerEntry(_data));
+            _singleContainer.AddComponent<SomeData>(new SimpleContainerEntry<SomeData>(_data));
             Assert.AreEqual(EntryValue, _singleContainer.Resolve<String>());
             Assert.Throws<ServiceNotFoundException>(() => _singleContainer.Resolve<Uri>());
             Assert.Throws<ServiceNotFoundException>(() => _singleContainer.Resolve<String>(Name));
@@ -102,7 +115,7 @@ namespace SimpleIoC.Tests
         public void TestResolveByType()
         {
             _innerSubContainer.AddComponent<String>(_entry);
-            _singleContainer.AddComponent<SomeData>(new SimpleContainerEntry(_data));
+            _singleContainer.AddComponent<SomeData>(new SimpleContainerEntry<SomeData>(_data));
             Assert.AreEqual(EntryValue, _mainContainer.Resolve<String>());
             Assert.AreEqual(EntryValue, _subContainer1.Resolve<String>());
             Assert.AreEqual(EntryValue, _innerSubContainer.Resolve<String>());
@@ -137,7 +150,7 @@ namespace SimpleIoC.Tests
         {
             _singleContainer.AddComponent<String>(Name, _entry);
             _singleContainer.AddComponent<String>(OtherName, _entry);
-            _singleContainer.AddComponent<SomeData>(AnotherName, new SimpleContainerEntry(_data));
+            _singleContainer.AddComponent<SomeData>(AnotherName, new SimpleContainerEntry<SomeData>(_data));
             Assert.AreEqual(EntryValue, _singleContainer.Resolve<String>(Name));
             Assert.Throws<ServiceNotFoundException>(() => _singleContainer.Resolve<String>(UnknownName));
             Assert.Throws<ServiceNotFoundException>(() => _singleContainer.Resolve<String>());
@@ -148,7 +161,7 @@ namespace SimpleIoC.Tests
         {
             _innerSubContainer.AddComponent<String>(Name, _entry);
             _innerSubContainer.AddComponent<String>(OtherName, _entry);
-            _innerSubContainer.AddComponent<SomeData>(AnotherName, new SimpleContainerEntry(_data));
+            _innerSubContainer.AddComponent<SomeData>(AnotherName, new SimpleContainerEntry<SomeData>(_data));
             Assert.AreEqual(EntryValue, _mainContainer.Resolve<String>(Name));
             Assert.AreEqual(EntryValue, _subContainer1.Resolve<String>(Name));
             Assert.AreEqual(EntryValue, _innerSubContainer.Resolve<String>(Name));
@@ -183,7 +196,7 @@ namespace SimpleIoC.Tests
         {
             _singleContainer.AddComponent(Name, _entry);
             _singleContainer.AddComponent(OtherName, _otherEntry);
-            _singleContainer.AddComponent(AnotherName, new SimpleContainerEntry(_data));
+            _singleContainer.AddComponent(AnotherName, new SimpleContainerEntry<SomeData>(_data));
             ResolveByPredicateCommonBody(_singleContainer);
         }
 
@@ -192,7 +205,7 @@ namespace SimpleIoC.Tests
         {
             _mainContainer.AddComponent(Name, _entry);
             _subContainer1.AddComponent(OtherName, _otherEntry);
-            _subContainer2.AddComponent(AnotherName, new SimpleContainerEntry(_data));
+            _subContainer2.AddComponent(AnotherName, new SimpleContainerEntry<SomeData>(_data));
             ResolveByPredicateCommonBody(_mainContainer);
         }
 
@@ -201,7 +214,7 @@ namespace SimpleIoC.Tests
         {
             _singleContainer.AddComponent(Name, _entry);
             _singleContainer.AddComponent(OtherName, _otherEntry);
-            _singleContainer.AddComponent(AnotherName, new SimpleContainerEntry(_data));
+            _singleContainer.AddComponent(AnotherName, new SimpleContainerEntry<SomeData>(_data));
             ResolveEntriesByPredicateCommonBody(_singleContainer);
         }
 
@@ -210,8 +223,13 @@ namespace SimpleIoC.Tests
         {
             _mainContainer.AddComponent(Name, _entry);
             _subContainer1.AddComponent(OtherName, _otherEntry);
-            _subContainer2.AddComponent(AnotherName, new SimpleContainerEntry(_data));
+            _subContainer2.AddComponent(AnotherName, new SimpleContainerEntry<SomeData>(_data));
             ResolveEntriesByPredicateCommonBody(_mainContainer);
+        }
+
+        private void CheckServiceNotFoundException(Action action, String exceptionMessage)
+        {
+            ExceptionChecker.Throws<ServiceNotFoundException>(action, exceptionMessage);
         }
 
         private void ResolveByPredicateCommonBody(IServiceContainer container)
@@ -248,8 +266,8 @@ namespace SimpleIoC.Tests
         private IServiceContainer _subContainer2;
         private IServiceContainer _innerSubContainer;
 
-        private readonly IContainerEntry _entry = new SimpleContainerEntry(EntryValue);
-        private readonly IContainerEntry _otherEntry = new SimpleContainerEntry(OtherEntryValue);
+        private readonly IContainerEntry _entry = new SimpleContainerEntry<String>(EntryValue);
+        private readonly IContainerEntry _otherEntry = new SimpleContainerEntry<String>(OtherEntryValue);
         private readonly SomeData _data = new SomeData(OtherEntryValue);
 
         private const String EntryValue = "impulse 666";

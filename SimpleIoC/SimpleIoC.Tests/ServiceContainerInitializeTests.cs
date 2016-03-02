@@ -17,7 +17,7 @@ namespace SimpleIoC.Tests
         public void TestInitialize()
         {
             Assert.IsFalse(_container.HasComponent<String>());
-            Action<IServiceContainer> initializer = container => container.AddComponent<String>(new SimpleContainerEntry(EntryValue));
+            Action<IServiceContainer> initializer = container => container.AddComponent<String>(new SimpleContainerEntry<String>(EntryValue));
             _container.Initialize(initializer);
             Assert.IsTrue(_container.HasComponent<String>());
         }
@@ -25,7 +25,7 @@ namespace SimpleIoC.Tests
         [Test]
         public void TestClear()
         {
-            _container.AddComponent<String>(new SimpleContainerEntry(EntryValue));
+            _container.AddComponent<String>(new SimpleContainerEntry<String>(EntryValue));
             Assert.IsTrue(_container.HasComponent<String>());
             _container.Clear();
             Assert.IsFalse(_container.HasComponent<String>());

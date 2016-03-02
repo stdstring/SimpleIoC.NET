@@ -2,17 +2,21 @@
 
 namespace SimpleIoC.ContainerEntry
 {
-    public class LazyContainerEntry : IContainerEntry
+    public class LazyContainerEntry<T> : IContainerEntry<T>, IContainerEntry where T : class
     {
-        public LazyContainerEntry(Func<IServiceContainer, Object> initializer)
+        public LazyContainerEntry(CreateFunc<T> initializer)
         {
+            if (initializer == null)
+                throw new ArgumentNullException(nameof(initializer));
             _initializer = initializer;
             _initialized = false;
             _value = null;
         }
 
-        public Object GetValue(IServiceContainer container)
+        public T GetValue(IServiceContainer container)
         {
+            if (container == null)
+                throw new ArgumentNullException(nameof(container));
             if (!_initialized)
             {
                 _value = _initializer(container);
@@ -21,8 +25,15 @@ namespace SimpleIoC.ContainerEntry
             return _value;
         }
 
-        private readonly Func<IServiceContainer, Object> _initializer;
+        Object IContainerEntry.GetValue(IServiceContainer container)
+        {
+            if (container == null)
+                throw new ArgumentNullException(nameof(container));
+            return GetValue(container);
+        }
+
+        private readonly CreateFunc<T> _initializer;
         private Boolean _initialized;
-        private Object _value;
+        private T _value;
     }
 }
